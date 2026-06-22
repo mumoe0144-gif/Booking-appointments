@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bruv Booking Widget</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+  .widget { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+  button { background: #1a73e8; color: white; border: none; cursor: pointer; }
+  button:disabled { background: #ccc; cursor: not-allowed; }
+  .slots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+  .slot { padding: 10px; border: 2px solid #1a73e8; border-radius: 6px; text-align: center; cursor: pointer; }
+  .slot.booked { background: #eee; color: #999; border-color: #ccc; cursor: not-allowed; }
+  h3 { color: #1a73e8; margin-top: 0; }
+</style>
+</head>
+<body>
+<div class="widget">
+  <h3>Book with Bruv</h3>
+  <input type="date" id="date" min="">
+  <input type="text" id="name" placeholder="Your Name" required>
+  <input type="email" id="email" placeholder="Your Email" required>
+  <div class="slots" id="slots">Pick a date first</div
