@@ -4,7 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bruv Booking Widget</title>
-<style> body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }.widget { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); } input, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; } button { background: #1a73e8; color: white; border: none; cursor: pointer; } button:disabled { background: #ccc; cursor: not-allowed; } #slots { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }.slot { padding: 10px; border: 2px solid #1a73e8; border-radius: 6px; text-align: center; cursor: pointer; }.slot.booked { background: #eee; color: #999; border-color: #ccc; cursor: not-allowed; } h3 { color: #1a73e8; margin-top: 0; }</style>
+<style>
+body{font-family:Arial;padding:20px;background:#f5f5f5}
+.widget{max-width:400px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+input,button{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
+button{background:#1a73e8;color:white;border:none;cursor:pointer}
+button:disabled{background:#ccc}
+#slots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
+.slot{padding:10px;border:2px solid #1a73e8;border-radius:6px;text-align:center;cursor:pointer}
+.slot.booked{background:#eee;color:#999;border-color:#ccc;cursor:not-allowed}
+h3{color:#1a73e8;margin-top:0}
+</style>
 </head>
 <body>
 <div class="widget">
@@ -12,13 +22,62 @@
 <input type="date" id="date" min="">
 <input type="text" id="name" placeholder="Your Name" required>
 <input type="email" id="email" placeholder="Your Email" required>
-<div class="slots" id="slots">Pick a date first</div>
+<div id="slots">Pick a date first</div>
 </div>
 <script>
 const API_KEY = 'AIzaSyCRoYevByfjjw7I4Eoge8gZwM5i8ryjKJI';
 const CALENDAR_ID = 'primary';
-// Rest of your booking JS code goes here...
+const START_HOUR = 9;
+const END_HOUR = 17;
+const SLOT_MINUTES = 30;
+
 document.getElementById('date').min = new Date().toISOString().split('T')[0];
+document.getElementById('date').addEventListener('change', loadSlots);
+
+async function loadSlots(){
+  const date = document.getElementById('date').value;
+  if(!date) return;
+
+  document.getElementById('slots').innerHTML = 'Loading slots...';
+
+  const timeMin = date + 'T00:00:00Z';
+  const timeMax = date + 'T23:59:59Z';
+  const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true&orderBy=startTime&key=${API_KEY}`;
+
+  try{
+    const res = await fetch(url);
+    const data = await res.json();
+    const booked = [];
+
+    (data.items||[]).forEach(e=>{
+      if(e.start.dateTime){
+        const d = new Date(e.start.dateTime);
+        booked.push(d.getHours()*60 + d.getMinutes());
+      }
+    });
+
+    let html = '';
+    for(let h=START_HOUR; h<END_HOUR; h++){
+      for(let m=0; m<60; m+=SLOT_MINUTES){
+        const time = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+        const mins = h*60 + m;
+        const isBooked = booked.some(b => Math.abs(b-mins) < SLOT_MINUTES);
+        html += `<div class="slot ${isBooked?'booked':''}" onclick="${isBooked?'':`book('${time}')`}">${time}</div>`;
+      }
+    }
+    document.getElementById('slots').innerHTML = html || 'No slots';
+  }catch(e){
+    document.getElementById('slots').innerHTML = 'Error loading. Check API key';
+    console.log(e);
+  }
+}
+
+function book(time){
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  if(!name||!email){ alert('Enter name + email first'); return; }
+  alert(`Slot ${time} selected for ${name}\n\nThis is demo. For real booking, connect backend or use Calendly API.`);
+}
 </script>
 </body>
 </html>
