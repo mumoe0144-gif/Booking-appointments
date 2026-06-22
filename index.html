@@ -1,12 +1,13 @@
-8<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bruv Booking Widget</title>
+<title>Bruv Plumbing - Book Appointment</title>
 <style>
-body{font-family:Arial;padding:20px;background:#f5f5f5}
-.widget{max-width:400px;margin:auto;background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+body{font-family:Arial;padding:20px;background:#f5f5f5;margin:0}
+.container{max-width:400px;margin:auto}
+.widget{background:white;padding:20px;border-radius:0 0 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
 input,button{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
 button{background:#1a73e8;color:white;border:none;cursor:pointer}
 button:disabled{background:#ccc}
@@ -17,6 +18,23 @@ h3{color:#1a73e8;margin-top:0}
 </style>
 </head>
 <body>
+<div class="container">
+
+<!-- 1. LOGO HEADER - BLUE BAR WITH LOGO -->
+<div style="text-align:center; padding:25px 20px; background:#1a73e8; border-radius:12px 12px 0 0;">
+  <img src="An9GSyKLCFkFWnsQkhctfP-_gQzdGVx54_rntljYgVR8T3AKJ_j0oVqtWauvTK6BWGbdwzTlkE5WbupqHKaWkj47dnw9HpvtEQqoJ9dtGWlVEkcYFqWx751x"
+       alt="Logo"
+       style="width:80px; height:80px; border-radius:50%; background:white; padding:8px; margin-bottom:10px;">
+  <h2 style="color:white; margin:0; font-size:22px;">Bruv Plumbing Services</h2>
+  <p style="color:white; opacity:0.9; margin:5px 0 0; font-size:14px;">Fast repairs in Kiserian • Same-day service</p>
+</div>
+
+<!-- 2. PLUMBER IMAGE -->
+<img src="An9GSyKLCFkFWnsQkhctfP-_gQzdGVx54_rntljYgVR8T3AKJ_j0oVqtWauvTK6BWGbdwzTlkE5WbupqHKaWkj47dnw9HpvtEQqoJ9dtGWlVEkcYFqWx751x"
+     alt="Plumbing Service"
+     style="width:100%; display:block;">
+
+<!-- 3. YOUR BOOKING WIDGET BELOW -->
 <div class="widget">
 <h3>Book with Bruv</h3>
 <input type="date" id="date" min="">
@@ -24,6 +42,7 @@ h3{color:#1a73e8;margin-top:0}
 <input type="email" id="email" placeholder="Your Email" required>
 <div id="slots">Pick a date first</div>
 </div>
+
 <script>
 const API_KEY = 'AIzaSyCRoYevByfjjw7I4Eoge8gZwM5i8ryjKJI';
 const CALENDAR_ID = 'primary';
@@ -79,17 +98,6 @@ function book(date,time){
   window.open(url, '_blank');
 }
 </script>
+</div>
 </body>
 </html>
-<!-- PASTE HERE - THIS IS THE LOGO HEADER -->
-<div style="text-align:center; padding:25px 20px; background:#2563EB; border-radius:16px 16px 0 0;">
-  <img src="An9GSyKLCFkFWnsQkhctfP-_gQzdGVx54_rntljYgVR8T3AKJ_j0oVqtWauvTK6BWGbdwzTlkE5WbupqHKaWkj47dnw9HpvtEQqoJ9dtGWlVEkcYFqWx751x" 
-       alt="Logo" 
-       style="width:80px; height:80px; border-radius:50%; background:white; padding:8px; margin-bottom:10px;">
-  <h2 style="color:white; margin:0; font-size:22px;">Bruv Plumbing Services</h2>
-  <p style="color:white; opacity:0.9; margin:5px 0 0; font-size:14px;">Book fast repairs in Kiserian</p>
-</div>
-
-<!-- THEN CALENDLY WIDGET BELOW -->
-<div class="calendly-inline-widget" data-url="https://calendly.com/bruv93586/30min" style="min-width:320px;height:630px;"></div>
-<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
