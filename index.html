@@ -27,6 +27,7 @@ h3{color:#1a73e8;margin-top:0}
 <script>
 const API_KEY = 'AIzaSyCRoYevByfjjw7I4Eoge8gZwM5i8ryjKJI';
 const CALENDAR_ID = 'primary';
+const CALENDLY_LINK = 'https://calendly.com/bruv93586/30min';
 const START_HOUR = 9;
 const END_HOUR = 17;
 const SLOT_MINUTES = 30;
@@ -37,7 +38,6 @@ document.getElementById('date').addEventListener('change', loadSlots);
 async function loadSlots(){
   const date = document.getElementById('date').value;
   if(!date) return;
-
   document.getElementById('slots').innerHTML = 'Loading slots...';
 
   const timeMin = date + 'T00:00:00Z';
@@ -48,7 +48,6 @@ async function loadSlots(){
     const res = await fetch(url);
     const data = await res.json();
     const booked = [];
-
     (data.items||[]).forEach(e=>{
       if(e.start.dateTime){
         const d = new Date(e.start.dateTime);
@@ -62,21 +61,22 @@ async function loadSlots(){
         const time = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
         const mins = h*60 + m;
         const isBooked = booked.some(b => Math.abs(b-mins) < SLOT_MINUTES);
-        html += `<div class="slot ${isBooked?'booked':''}" onclick="${isBooked?'':`book('${time}')`}">${time}</div>`;
+        html += `<div class="slot ${isBooked?'booked':''}" onclick="${isBooked?'':`book('${date}','${time}')`}">${time}</div>`;
       }
     }
-    document.getElementById('slots').innerHTML = html || 'No slots';
+    document.getElementById('slots').innerHTML = html;
   }catch(e){
-    document.getElementById('slots').innerHTML = 'Error loading. Check API key';
-    console.log(e);
+    document.getElementById('slots').innerHTML = 'Error loading';
   }
 }
 
-function book(time){
+function book(date,time){
   const name = document.getElementById('name').value;
   const email = document.getElementById('email').value;
   if(!name||!email){ alert('Enter name + email first'); return; }
-  alert(`Slot ${time} selected for ${name}\n\nThis is demo. For real booking, connect backend or use Calendly API.`);
+
+  const url = `${CALENDLY_LINK}?date=${date}&time=${time}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`;
+  window.open(url, '_blank');
 }
 </script>
 </body>
